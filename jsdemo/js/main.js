@@ -68,23 +68,28 @@ class UserPanels {
             }
         }
     }
+    #createPanel(index) {
+        let user = this.#userArray[index];
+        let divTag = document.createElement('div');
+        divTag.classList.add('user');
+        divTag.dataset['id'] = index.toString();
+        if (this.#stateArray[index]) {
+            divTag.classList.add('selected');
+        }
+        for (let field in user) {
+            let val = user[field];
+            let divField = document.createElement('div');
+            divField.classList.add(field);
+            divField.innerHTML = val;
+            divTag.appendChild(divField);
+        }
+        return divTag;
+    }
     #build() {
         this.loadState();
         let containerTag = document.createElement('div');
         for (let i = 0; i < this.#userArray.length; i++) {
-            let divTag = document.createElement('div');
-            divTag.classList.add('user');
-            divTag.dataset['id'] = i.toString();
-            if (this.#stateArray[i])
-                divTag.classList.add('selected');
-            for (let field in this.#userArray[i]) {
-                let val = this.#userArray[i][field];
-                let divField = document.createElement('div');
-                divField.classList.add(field);
-                divField.innerHTML = val;
-                divTag.appendChild(divField);
-            }
-            containerTag.appendChild(divTag);
+            containerTag.appendChild(this.#createPanel(i));
         }
         document.body.appendChild(containerTag);
         document.documentElement.addEventListener('click',
